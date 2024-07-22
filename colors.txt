@@ -1,0 +1,3 @@
+dark green: #B6EF11
+medium: #3F570D
+light green: #E9FAB8

@@ -1,102 +1,155 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const transactions = {
+  sent: [
+    { id: '1', name: 'Ralph Edwards', date: 'Feb 09', amount: '₦50,000.00', status: 'successful', image: require('../../assets/images/user1.png') },
+    { id: '2', name: 'Jerome Bell', date: 'Feb 08', amount: '₦35,000.00', status: 'successful', image: require('../../assets/images/user2.png') },
+    { id: '3', name: 'Dianne Russell', date: 'Feb 06', amount: '₦6,400.00', status: 'successful', image: require('../../assets/images/user3.png') },
+    { id: '4', name: 'Marvin McKinney', date: 'Feb 06', amount: '₦6,000.00', status: 'successful', image: require('../../assets/images/user4.png') },
+    { id: '5', name: 'Courtney Henry', date: 'Feb 04', amount: '₦64.00', status: 'successful', image: require('../../assets/images/user1.png') },
+    { id: '6', name: 'Darlene Robertson', date: 'Feb 03', amount: '₦1,400.00', status: 'successful', image: require('../../assets/images/user2.png') },
+    { id: '7', name: 'Bessie Cooper', date: 'Feb 03', amount: '₦500.00', status: 'successful', image: require('../../assets/images/user2.png') },
+    { id: '8', name: 'Kristin Watson', date: 'Feb 01', amount: '₦32.00', status: 'successful', image: require('../../assets/images/user3.png') },
+    { id: '9', name: 'Robert Fox', date: 'Feb 01', amount: '₦12.00', status: 'successful', image: require('../../assets/images/user1.png') },
+  ],
+  received: [
+    { id: '1', name: 'John Doe', date: 'Feb 09', amount: '₦100.00', status: 'successful', image: require('../../assets/images/user1.png') },
+    { id: '2', name: 'Jane Smith', date: 'Feb 08', amount: '₦20.00', status: 'successful', image: require('../../assets/images/user2.png') },
+  ],
+  request: [
+    { id: '1', name: 'Alice Johnson', date: 'Feb 07', amount: '₦15.00', status: 'successful', image: require('../../assets/images/user4.png') },
+    { id: '2', name: 'Bob Brown', date: 'Feb 06', amount: '₦25.00', status: 'successful', image: require('../../assets/images/user2.png') },
+  ],
+};
 
-export default function TabTwoScreen() {
+const explore = () => {
+  const [selectedTab, setSelectedTab] = useState<'sent' | 'received' | 'request'>('sent');
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText> library
-          to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => {}}>
+          <Ionicons name="chevron-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>History</Text>
+      </View>
+      <View style={styles.tabContainer}>
+        <TouchableOpacity style={[styles.tabItem, selectedTab === 'sent' && styles.selectedTab]} onPress={() => setSelectedTab('sent')}>
+          <Text style={[styles.tabText, selectedTab === 'sent' && styles.selectedTabText]}>Sent</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.tabItem, selectedTab === 'received' && styles.selectedTab]} onPress={() => setSelectedTab('received')}>
+          <Text style={[styles.tabText, selectedTab === 'received' && styles.selectedTabText]}>Received</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.tabItem, selectedTab === 'request' && styles.selectedTab]} onPress={() => setSelectedTab('request')}>
+          <Text style={[styles.tabText, selectedTab === 'request' && styles.selectedTabText]}>Request</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <FlatList
+      showsVerticalScrollIndicator={false}
+        data={transactions[selectedTab]}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.transactionItem}>
+            <Image source={item.image} style={styles.icon} />
+            <View style={styles.transactionDetails}>
+              <Text style={styles.transactionName}>{item.name}</Text>
+              <Text style={styles.transactionDate}>Sent • {item.date}</Text>
+            </View>
+            <View style={styles.status}>
+            <Text style={styles.transactionAmount}>{item.amount}</Text>
+            <Text style={styles.transactionStatus}>{item.status}</Text>
+            </View>
+          </View>
+        )}
+      />
+      <View style={styles.card}></View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
   },
-  titleContainer: {
+  header: {
     flexDirection: 'row',
-    gap: 8,
+    alignItems: 'center',
+    padding: 15,
+    marginTop: 50,
   },
+  headerText: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginLeft: 10,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#F5F5F5',
+    paddingVertical: 10,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#999',
+  },
+  selectedTab: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#635BFF',
+  },
+  selectedTabText: {
+    color: '#635BFF',
+    fontWeight: '700',
+  },
+  transactionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  icon: {
+    width: 30,
+    height: 30,
+  },
+  transactionDetails: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  transactionName: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  transactionDate: {
+    color: '#999',
+    marginTop: 5,
+  },
+  transactionAmount: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  card:{
+    marginBottom: 100
+  },
+  status:{
+    flexDirection: "column",
+    alignSelf: "flex-end",
+    textAlign: "right"
+  },
+  transactionStatus:{
+    textAlign: "right",
+    fontSize: 12,
+    color: "#13C782"
+  }
 });
+
+export default explore;
