@@ -5,7 +5,8 @@ import { router } from 'expo-router'
 const PinSetup = () => {
   return (
     <View style={styles.container}>
-      <Text>PinSetup</Text>
+      <Text>This screen is under construction!</Text>
+      <Text>Please visit back later.</Text>
       <TouchableOpacity style={styles.button} onPress={() => router.push("/(tabs)")}>
         <Text style={styles.text}>Go To Homepage</Text>
       </TouchableOpacity>

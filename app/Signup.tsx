@@ -1,18 +1,66 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
+import { FontAwesome6 } from '@expo/vector-icons';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Modal, Image } from 'react-native';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
+
+SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+    'Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'Extrabold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Black': require('../assets/fonts/Poppins-Black.ttf'),
+    'ExtraLight': require('../assets/fonts/Poppins-ExtraLight.ttf'),
+    'Medium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Semibold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+    'Thin': require('../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../assets/fonts/Poppins-Light.ttf'),
+    'Mano': require('../assets/fonts/SpaceMono-Regular.ttf')
+  });
+};
 
 const Signup = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneError, setPhoneError] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [isSelected, setSelection] = useState(false);
+  const [firstNameFocused, setFirstNameFocused] = useState(false);
+  const [lastNameFocused, setLastNameFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
-  const handlePhoneChange = (text: string) => {
-    setPhoneNumber(text);
-    const isValid = validatePhoneNumber(text);
-    setPhoneError(isValid ? '' : 'Invalid phone number');
+  useEffect(() => {
+    const loadFonts = async () => {
+      await fetchFonts();
+      SplashScreen.hideAsync();
+    };
+
+    loadFonts();
+  }, []);
+
+  const handleFirstNameChange = (text: string) => {
+    setFirstName(text);
+    setFirstNameError(text ? '' : 'First name is required');
+  };
+
+  const handleLastNameChange = (text: string) => {
+    setLastName(text);
+    setLastNameError(text ? '' : 'Last name is required');
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    setEmailError(validateEmail(text) ? '' : 'Invalid email address');
   };
 
   const handlePasswordChange = (password: string) => {
@@ -21,9 +69,9 @@ const Signup = () => {
     setPasswordError(error);
   };
 
-  const validatePhoneNumber = (number: string) => {
-    const phoneRegex = /^(\+?\d{1,4}[-.\s]?)?(\d{10})$/;
-    return phoneRegex.test(number);
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const validatePassword = (password: string) => {
@@ -47,198 +95,285 @@ const Signup = () => {
   };
 
   const handleSignUp = () => {
-    const isPhoneValid = validatePhoneNumber(phoneNumber);
-    const passwordValidation = validatePassword(password);
-    if (isPhoneValid && !passwordValidation) {
+    const isValid = firstName && lastName && validateEmail(email) && !validatePassword(password);
+    if (isValid) {
       setModalVisible(true);
     } else {
-      console.log('Phone number or password is invalid');
+      setFirstNameError(firstName ? '' : 'First name is required');
+      setLastNameError(lastName ? '' : 'Last name is required');
+      setEmailError(validateEmail(email) ? '' : 'Invalid email address');
+      setPasswordError(validatePassword(password));
     }
   };
 
+  const toggleCheckbox = () => {
+    setSelection(!isSelected);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Create an account</Text>
-      <Text style={styles.subText}>Enter your mobile number to verify your account</Text>
-
-      <Text style={styles.phoneText}>Phone</Text>
-      <View style={styles.phoneInputContainer}>
-        <Text style={styles.countryCode}>+234</Text>
-        <TextInput
-          style={styles.phoneInput}
-          value={phoneNumber}
-          onChangeText={handlePhoneChange}
-          keyboardType="phone-pad"
-          placeholder="Mobile number"
-          onFocus={() => setPhoneError('')}
-        />
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.pagination}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <FontAwesome6 style={{ marginRight: 50, marginLeft: -85 }} name='xmark' size={24} />
+        </TouchableOpacity>
+        <View style={[styles.dot, styles.activeDot]} />
+        <View style={styles.dot} />
+        <View style={styles.dot} />
       </View>
-      {!!phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
+      <Text style={styles.title}>Create your account</Text>
 
-      <Text style={styles.phoneText}>Password</Text>
-      <View style={styles.passwordContainer}>
-        <TextInput
-          value={password}
-          onChangeText={handlePasswordChange}
-          keyboardType="default"
-          placeholder="Password"
-          secureTextEntry
-          onFocus={() => setPasswordError('')}
-        />
+      <ScrollView showsVerticalScrollIndicator={false}>
+      <Text style={styles.label}>First Name</Text>
+      <TextInput
+        style={[styles.input, firstNameFocused && styles.inputFocused]}
+        placeholder="First Name"
+        onFocus={() => setFirstNameFocused(true)}
+        onBlur={() => setFirstNameFocused(false)}
+        onChangeText={handleFirstNameChange}
+        value={firstName}
+      />
+      {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
+
+      <Text style={styles.label}>Last Name</Text>
+      <TextInput
+        style={[styles.input, lastNameFocused && styles.inputFocused]}
+        placeholder="Last Name"
+        onFocus={() => setLastNameFocused(true)}
+        onBlur={() => setLastNameFocused(false)}
+        onChangeText={handleLastNameChange}
+        value={lastName}
+      />
+      {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
+
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={[styles.input, emailFocused && styles.inputFocused]}
+        placeholder="Email"
+        onFocus={() => setEmailFocused(true)}
+        onBlur={() => setEmailFocused(false)}
+        onChangeText={handleEmailChange}
+        value={email}
+        keyboardType="email-address"
+      />
+      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
+      <Text style={styles.label}>Password</Text>
+      <TextInput
+        style={[styles.input, passwordFocused && styles.inputFocused]}
+        placeholder="Password"
+        secureTextEntry
+        onFocus={() => setPasswordFocused(true)}
+        onBlur={() => setPasswordFocused(false)}
+        onChangeText={handlePasswordChange}
+        value={password}
+      />
+      {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+
+      <View style={styles.termsContainer}>
+        <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
+          <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+            {isSelected && <FontAwesome6 name="check" size={16} color="#fff" />}
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.termsText}>
+          I certify that I'm 18 years of age or older, and I agree to the
+          <Text style={styles.link}> User Agreement</Text> and
+          <Text style={styles.link}> Privacy Policy</Text>
+        </Text>
       </View>
-      {!!passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
 
-      <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-        <Text style={styles.signUpButtonText}>Sign Up</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
+      </ScrollView>
 
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image source={require('../assets/images/Invitation.png')} style={styles.logo} />
-            <Text style={styles.modalText}>Verify your phone number before we send code</Text>
-            <Text style={styles.modalSubText}>Is this correct? +234 {phoneNumber}</Text>
+            <Text style={styles.modalText}>Please confirm your details:</Text>
+            <Text style={styles.modalSubText}>First Name: <Text style={styles.labels}>{firstName}</Text></Text>
+            <Text style={styles.modalSubText}>Last Name: <Text style={styles.labels}>{lastName}</Text></Text>
+            <Text style={styles.modalSubText}>Email: <Text style={styles.labels}>{email}</Text></Text>
             <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.modalButton} onPress={() => router.push('/OtpVerification')}>
-                <Text style={styles.modalButtonText}>Yes</Text>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => {
+                  setModalVisible(false);
+                  router.push('/TwoStepVerificationScreen');
+                }}
+              >
+                <Text style={styles.modalButtonText}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.modalButtonNo]}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalButtonTextNo}>No</Text>
+                <Text style={styles.modalButtonTextNo}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-    </View>
+    </GestureHandlerRootView>
   );
 };
-
-export default Signup;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
   },
-  headerText: {
-    marginTop: 60,
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  subText: {
-    color: '#666',
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginBottom: 20,
+    marginTop: 50,
+    alignItems: 'center',
   },
-  phoneText: {
-    marginBottom: 10,
+  dot: {
+    width: 40,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#ccc',
+    marginHorizontal: 4,
   },
-  phoneInputContainer: {
+  activeDot: {
+    backgroundColor: '#635BFF',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    fontFamily: 'Semibold',
+  },
+  input: {
+    height: 55,
+    borderColor: '#f0f0f0',
+    borderWidth: 2,
+    borderRadius: 8,
+    marginBottom: 20,
+    paddingLeft: 10,
+    fontSize: 16,
+    fontFamily: 'Regular',
+  },
+  inputFocused: {
+    borderColor: '#635BFF',
+  },
+  termsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginBottom: 10,
+    marginBottom: 20,
   },
-  passwordContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 7,
-    borderRadius: 5,
-  },
-  countryCode: {
-    fontSize: 18,
+  checkboxContainer: {
     marginRight: 10,
   },
-  phoneInput: {
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxSelected: {
+    backgroundColor: '#635BFF',
+    borderColor: '#635BFF',
+  },
+  termsText: {
     flex: 1,
-    fontSize: 18,
+    flexWrap: 'wrap',
+    fontFamily: 'Regular',
+    fontSize: 12,
+    color: '#444',
+  },
+  link: {
+    color: 'blue',
+  },
+  button: {
+    backgroundColor: '#635BFF',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 100,
+  },
+  buttonText: {
+    color: '#fff',
+    fontFamily: 'Semibold',
+  },
+  label: {
+    fontWeight: '500',
+    fontFamily: 'Medium',
   },
   errorText: {
     color: 'red',
-    marginTop: 5,
-  },
-  signUpButton: {
-    marginTop: 20,
-    backgroundColor: '#635BFF',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  signUpButtonText: {
-    color: '#fff',
-    fontSize: 16,
+    marginBottom: 10,
   },
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
     width: 300,
-    backgroundColor: 'white',
-    borderRadius: 10,
+    backgroundColor: '#fff',
     padding: 20,
+    borderRadius: 8,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    height: 400
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginBottom: 20,
   },
   modalText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-    color: "#444"
+    fontSize: 18,
+    fontFamily: 'Bold',
+    marginBottom: 30,
   },
   modalSubText: {
     fontSize: 16,
-    marginBottom: 25,
-    textAlign: 'center',
+    fontFamily: 'Regular',
+    marginBottom: 5,
+    textAlign: "left",
+    alignSelf: "flex-start"
   },
   modalButtons: {
-    flexDirection: 'column',
-    marginBottom: 40,
+    flexDirection: 'row',
+    marginTop: 65,
   },
   modalButton: {
     backgroundColor: '#635BFF',
-    padding: 14,
-    borderRadius: 5,
-    margin: 5,
+    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    marginHorizontal: 5,
     alignItems: 'center',
-    width: 250,
   },
   modalButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: "500"
+    color: '#fff',
+    fontFamily: 'Regular',
   },
   modalButtonNo: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#635BFF',
-    fontWeight: "500"
+    backgroundColor: '#ccc',
   },
   modalButtonTextNo: {
-    color: '#635BFF',
-    fontSize: 16,
+    color: '#000',
+    fontFamily: 'Regular',
   },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 20
+  labels:{
+    fontFamily: "Regular",
+    color: "#635bff"
   }
 });
+
+export default Signup;

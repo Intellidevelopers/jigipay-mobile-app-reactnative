@@ -1,10 +1,29 @@
 import 'react-native-gesture-handler';
 import React, { useMemo, useRef, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, FlatList } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+    'Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'Extrabold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Black': require('../assets/fonts/Poppins-Black.ttf'),
+    'ExtraLight': require('../assets/fonts/Poppins-ExtraLight.ttf'),
+    'Medium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Semibold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+    'Thin': require('../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../assets/fonts/Poppins-Light.ttf'),
+    'Mano': require('../assets/fonts/SpaceMono-Regular.ttf')
+  });
+};
 
 const Transfer = () => {
   const [selectedBank, setSelectedBank] = useState<{ name: string; logo: any } | null>(null);
@@ -13,8 +32,28 @@ const Transfer = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const banks = [
-    { name: 'Firstbank', logo: require('../assets/images/user1.png') },
-    { name: 'GTBank', logo: require('../assets/images/user1.png') },
+    { name: 'Access Bank', logo: require('../assets/banks/access.png') },
+    { name: 'Alat VFD', logo: require('../assets/banks/alat.png') },
+    { name: 'Citibank', logo: require('../assets/banks/citi.png') },
+    { name: 'Fcmb', logo: require('../assets/banks/fcmb.png') },
+    { name: 'Fidelity Bank', logo: require('../assets/banks/fidelity.png') },
+    { name: 'Firstbank', logo: require('../assets/banks/firstbank.png') },
+    { name: 'GTBank', logo: require('../assets/banks/gtb.png') },
+    { name: 'Heritage Bank', logo: require('../assets/banks/heritage.png') },
+    { name: 'Jaiz Bank', logo: require('../assets/banks/jaiz.png') },
+    { name: 'Keystone Bank', logo: require('../assets/banks/keystone.png') },
+    { name: 'Kuda', logo: require('../assets/banks/kuda.png') },
+    { name: 'Parallax', logo: require('../assets/banks/parallax.png') },
+    { name: 'Polaris', logo: require('../assets/banks/polaris.png') },
+    { name: 'Providus', logo: require('../assets/banks/providus.png') },
+    { name: 'Standard Chartered Bank', logo: require('../assets/banks/standard.png') },
+    { name: 'Sterling Bank', logo: require('../assets/banks/sterling.png') },
+    { name: 'Taj Bank', logo: require('../assets/banks/tajbank.png') },
+    { name: 'Union Bank', logo: require('../assets/banks/union.png') },
+    { name: 'Unity Bank', logo: require('../assets/banks/unity.png') },
+    { name: 'vby FD', logo: require('../assets/banks/vbyfd.png') },
+    { name: 'Wema Bank', logo: require('../assets/banks/wema.png') },
+    { name: 'Zenith Bank', logo: require('../assets/banks/zenith.png') },
     // Add more banks as needed
   ];
 
@@ -28,7 +67,7 @@ const Transfer = () => {
     setSaveBeneficiary((prev) => !prev);
   };
 
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -46,7 +85,7 @@ const Transfer = () => {
               <View style={styles.iconContainer}>
                 <Ionicons name='person-circle' size={50} color='#635BFF'/>
               </View>
-              <View style={styles.textContainer}>
+              <View>
                 <Text style={styles.headText}>Beneficiaries</Text>
                 <Text style={styles.subText}>Transfer to already saved account</Text>
               </View>
@@ -65,7 +104,7 @@ const Transfer = () => {
 
         <View style={styles.passwordContainer}>
           <TextInput
-            keyboardType="default"
+            keyboardType='phone-pad'
             placeholder="Account Number"
             style={styles.phoneInput}
           />
@@ -78,7 +117,7 @@ const Transfer = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => {router.push('/PasscodeScreen')}}>
           <Text style={styles.buttonText}>Proceed</Text>
         </TouchableOpacity>
 
@@ -90,7 +129,7 @@ const Transfer = () => {
             onClose={() => setShowBottomSheet(false)}
             backgroundStyle={styles.bottomSheetBackground} // Apply the background color
           >
-            <FlatList
+            <BottomSheetFlatList
               data={banks}
               keyExtractor={(item) => item.name}
               renderItem={({ item }) => (
@@ -99,6 +138,7 @@ const Transfer = () => {
                   <Text style={styles.bankName}>{item.name}</Text>
                 </TouchableOpacity>
               )}
+              contentContainerStyle={styles.flatListContentContainer}
             />
           </BottomSheet>
         )}
@@ -125,7 +165,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
-    fontWeight: "500"
+    fontFamily: "Semibold"
   },
   rowItems: {
     flexDirection: 'row',
@@ -139,7 +179,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     alignItems: 'center',
     width: '90%',
-    backgroundColor: "#f8f8f8"
+    backgroundColor: "#f7f7f7"
   },
   iconContainer: {
     backgroundColor: '#ddd',
@@ -148,13 +188,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   headText: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontSize: 16,
+    fontFamily: 'Semibold',
+    color: "#333"
   },
-  textContainer: {},
   subText: {
-    color: '#666',
-    fontWeight: '500',
+    color: '#333',
+    fontFamily: 'Medium',
+    fontSize: 12
   },
   divider: {
     marginTop: 40,
@@ -179,7 +220,7 @@ const styles = StyleSheet.create({
   },
   dropdownHeaderText: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Medium',
     color: '#666',
   },
   bankItem: {
@@ -187,16 +228,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#eee',
+    marginBottom: 10
   },
   bankLogo: {
     width: 30,
     height: 30,
     marginRight: 10,
+    borderRadius: 100
   },
   bankName: {
     fontSize: 16,
     color: '#333',
+    fontFamily: 'Medium'
   },
   passwordContainer: {
     borderWidth: 1,
@@ -219,10 +263,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   switchLabel: {
-    fontSize: 16,
+    fontSize: 15,
     marginRight: 10,
     color: "#444",
-    fontWeight: "600"
+    fontFamily: "Medium"
   },
   switch: {
     width: 50,
@@ -258,9 +302,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "400"
+    fontFamily: "Medium"
   },
   bottomSheetBackground: {
     backgroundColor: '#f8f8f8' // Change this to your desired color
-  }
+  },
+  flatListContentContainer: {
+    paddingBottom: 20,
+  },
 });

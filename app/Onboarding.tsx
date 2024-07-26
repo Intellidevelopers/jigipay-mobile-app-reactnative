@@ -3,6 +3,25 @@ import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions, Animated, Image, NativeScrollEvent, NativeSyntheticEvent, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Slide } from './types';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+    'Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'Extrabold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Black': require('../assets/fonts/Poppins-Black.ttf'),
+    'ExtraLight': require('../assets/fonts/Poppins-ExtraLight.ttf'),
+    'Medium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Semibold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+    'Thin': require('../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../assets/fonts/Poppins-Light.ttf'),
+    'Mano': require('../assets/fonts/SpaceMono-Regular.ttf')
+  });
+};
 
 const { width } = Dimensions.get('window');
 
@@ -91,18 +110,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Bold',
     color: '#222',
     textAlign: 'center',
     marginVertical: 10,
     marginBottom: 6,
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#666',
     textAlign: 'center',
     marginBottom: 80,
     paddingHorizontal: 20,
+    fontFamily: 'Regular'
   },
   pagination: {
     flexDirection: 'row',
@@ -131,7 +151,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "400",
+    fontFamily: "Medium",
   },
 });
 

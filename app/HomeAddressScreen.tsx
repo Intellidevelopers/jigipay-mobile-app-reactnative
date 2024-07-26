@@ -118,11 +118,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#fff"
   },
   progressBar: {
     height: 4,
     backgroundColor: '#635BFF',
-    width: '100%',
+    width: '50%',
     marginBottom: 20,
     marginTop: 50
   },
@@ -136,8 +137,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    borderWidth: 2,
-    borderColor: '#ccc',
+    borderWidth: 1,
+    borderColor: '#ddd',
     padding: 10,
     borderRadius: 7,
     marginBottom: 20,

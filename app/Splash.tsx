@@ -9,7 +9,7 @@ export default function Splash() {
   useEffect(() => {
     setTimeout(() => {
       router.push('/Onboarding');
-    }, 3000); // Redirect after 2 seconds
+    }, 6000); // Redirect after 2 seconds
   }, []);
 
   return (

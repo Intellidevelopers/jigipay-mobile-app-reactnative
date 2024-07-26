@@ -1,7 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import BottomSheet from '@gorhom/bottom-sheet';
 
+SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+    'Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+    'Extrabold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Black': require('../../assets/fonts/Poppins-Black.ttf'),
+    'ExtraLight': require('../../assets/fonts/Poppins-ExtraLight.ttf'),
+    'Medium': require('../../assets/fonts/Poppins-Medium.ttf'),
+    'Semibold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+    'Thin': require('../../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../../assets/fonts/Poppins-Light.ttf'),
+    'Mano': require('../../assets/fonts/SpaceMono-Regular.ttf')
+  });
+};
+
+ 
 const transactions = {
   sent: [
     { id: '1', name: 'Ralph Edwards', date: 'Feb 09', amount: '₦50,000.00', status: 'successful', image: require('../../assets/images/user1.png') },
@@ -26,6 +47,36 @@ const transactions = {
 
 const explore = () => {
   const [selectedTab, setSelectedTab] = useState<'sent' | 'received' | 'request'>('sent');
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [selectedBank, setSelectedBank] = useState<{ name: string, logo: any } | null>(null);
+
+  const banks = [
+    { name: 'Bank Transfer', logo: require('../../assets/images/bank.png') },
+    { name: 'USSD', logo: require('../../assets/images/ussd.jpeg') },
+    // Add more banks as needed
+  ];
+
+  const snapPoints = useMemo(() => ['25%', '40%'], []);
+
+  const handleBankSelect = (bank: { name: string, logo: any }) => {
+    setSelectedBank(bank);
+    bottomSheetRef.current?.close();
+    setShowBottomSheet(false);
+  };
+
+  useEffect(() => {
+    fetchFonts().then(() => {
+      setFontsLoaded(true);
+      SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
+    }).catch((error) => console.warn(error));
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // Return null until fonts are loaded and splash screen is hidden
+  }
 
   return (
     <View style={styles.container}>
@@ -127,15 +178,17 @@ const styles = StyleSheet.create({
   },
   transactionName: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Semibold'
   },
   transactionDate: {
-    color: '#999',
+    color: '#777',
     marginTop: 5,
+    fontFamily: 'Medium',
+    fontSize: 12
   },
   transactionAmount: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Semibold',
   },
   card:{
     marginBottom: 100
@@ -143,7 +196,8 @@ const styles = StyleSheet.create({
   status:{
     flexDirection: "column",
     alignSelf: "flex-end",
-    textAlign: "right"
+    textAlign: "right",
+    alignItems: "center"
   },
   transactionStatus:{
     textAlign: "right",

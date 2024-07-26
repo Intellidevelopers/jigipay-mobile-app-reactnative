@@ -39,7 +39,7 @@ const Beneficiaries = () => {
       </View>
 
       <View style={styles.infoContainer}>
-        <MaterialIcons name='bubble-chart' size={34}/>
+        <MaterialIcons name='bubble-chart' size={34} color={'#635BFF'}/>
         <View>
           <Text style={styles.infoText}>These are accounts you saved for later.</Text>
           <Text style={styles.infoText}>You can edit and delete them too...</Text>
@@ -59,7 +59,7 @@ const Beneficiaries = () => {
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.beneficiaryItem} onPress={() => router.push('/SendMoney')}>
             <View style={styles.beneficiaryDetails}>
-              <Image source={require('../assets/images/user1.png')} style={styles.beneficiaryImage} />
+              <Image source={require('../assets/images/user4.png')} style={styles.beneficiaryImage} />
               <View>
                 <Text style={styles.beneficiaryName}>{item.name}</Text>
                 <Text style={styles.beneficiaryDate}>{item.date}</Text>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
-    fontWeight: '500',
+    fontFamily: 'Semibold',
     marginLeft: 20,
   },
   infoContainer: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#eee',
   },
   beneficiaryDetails: {
     flexDirection: 'row',
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   beneficiaryName: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Semibold',
   },
   beneficiaryDate: {
     color: '#666',
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Medium',
   },
   fee: {
     color: '#666',

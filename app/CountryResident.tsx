@@ -1,6 +1,6 @@
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, Pressable } from 'react-native';
 
 interface Country {
   label: string;
@@ -56,11 +56,9 @@ const CountryResident: React.FC = () => {
         </View>
       </Modal>
       
-      <TouchableOpacity onPress={() => router.push('/PinSetup')}>
-        <View style={styles.button}>
+      <Link style={styles.button} href={'/PinSetup'}>
           <Text style={styles.buttonText}>Continue</Text>
-        </View>
-      </TouchableOpacity>
+      </Link>
     </View>
   );
 }
@@ -127,6 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     marginTop: 410,
+    textAlign: "center"
   },
   buttonText: {
     color: '#fff',
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
   progressBar: {
     height: 4,
     backgroundColor: '#635BFF',
-    width: '33%',
+    width: '100%',
     marginBottom: 20,
     marginTop: 50,
   },

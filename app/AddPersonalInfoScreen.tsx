@@ -38,14 +38,14 @@ const AddPersonalInfoScreen: React.FC = () => {
         value={fullName}
         onChangeText={setFullName}
       />
-      <Text style={styles.label}>Full Name</Text>
+      <Text style={styles.label}>Username</Text>
       <TextInput
         style={styles.input}
         placeholder="@username"
         value={username}
         onChangeText={setUsername}
       />
-      <Text style={styles.label}>Full Name</Text>
+      <Text style={styles.label}>Date of Birth</Text>
       <TouchableOpacity onPress={showDatePicker} style={styles.dateInput}>
         <Text style={styles.dateText}>{dateOfBirth || 'MM/DD/YYYY'}</Text>
       </TouchableOpacity>
@@ -71,11 +71,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#fff"
   },
   progressBar: {
     height: 4,
     backgroundColor: '#635BFF',
-    width: '33%',
+    width: '75%',
     marginBottom: 20,
     marginTop: 50
   },
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 7,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     color: "#fff"
   },
   dateInput: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#ccc',
     padding: 13,
     borderRadius: 7,

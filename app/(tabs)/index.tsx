@@ -1,15 +1,68 @@
-import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, SafeAreaView, TouchableOpacity, Pressable } from 'react-native'
-import React from 'react'
-import { Link } from 'expo-router'
-import { Ionicons, MaterialCommunityIcons, Feather, MaterialIcons, AntDesign } from '@expo/vector-icons'
-import { router } from 'expo-router'
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, SafeAreaView, TouchableOpacity, Pressable, StatusBar } from 'react-native';
+import { Link } from 'expo-router';
+import { Ionicons, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import 'react-native-gesture-handler';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
-const index = () => {
+SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+    'Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+    'Extrabold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Black': require('../../assets/fonts/Poppins-Black.ttf'),
+    'ExtraLight': require('../../assets/fonts/Poppins-ExtraLight.ttf'),
+    'Medium': require('../../assets/fonts/Poppins-Medium.ttf'),
+    'Semibold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+    'Thin': require('../../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../../assets/fonts/Poppins-Light.ttf'),
+    'Mano': require('../../assets/fonts/SpaceMono-Regular.ttf')
+  });
+};
+
+const Index = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [selectedBank, setSelectedBank] = useState<{ name: string, logo: any } | null>(null);
+
+  const banks = [
+    { name: 'Bank Transfer', logo: require('../../assets/images/bank.png') },
+    { name: 'USSD', logo: require('../../assets/images/ussd.jpeg') },
+    // Add more banks as needed
+  ];
+
+  const snapPoints = useMemo(() => ['25%', '40%'], []);
+
+  const handleBankSelect = (bank: { name: string, logo: any }) => {
+    setSelectedBank(bank);
+    bottomSheetRef.current?.close();
+    setShowBottomSheet(false);
+  };
+
+  useEffect(() => {
+    fetchFonts().then(() => {
+      setFontsLoaded(true);
+      SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
+    }).catch((error) => console.warn(error));
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // Return null until fonts are loaded and splash screen is hidden
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <ImageBackground source={require('../../assets/images/Background.png')} style={styles.Dashboard}>
         <View style={styles.rowItems1}>
-         <Pressable onPress={() => router.push('/profile')}>
+         <Pressable onPress={() => router.push('/Settings')}>
          <View style={styles.profileItems}>
             <Image source={require('../../assets/images/avatar.png')} style={styles.avatar} />
             <View>
@@ -18,22 +71,30 @@ const index = () => {
             </View>
           </View>
          </Pressable>
+          <TouchableOpacity onPress={() => router.push('/Notification')}>
           <Ionicons name='notifications-outline' color={"#000"} size={25} />
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.balance}>Balance</Text>
         <View style={styles.balanceItems}>
-          <Text style={styles.amount}>₦105,434.00</Text>
-          <Ionicons name='eye' size={30}/>
+          <Text style={styles.amount}>
+            {isHidden ? '₦••••••••' : '₦105,434.00'}
+          </Text>
+          <TouchableOpacity onPress={() => setIsHidden(!isHidden)}>
+            <Ionicons name={isHidden ? 'eye-off' : 'eye'} size={30} />
+          </TouchableOpacity>
         </View>
-
+        <StatusBar backgroundColor={'black'} />
         <View style={styles.rowItems2}>
-          <View style={styles.columnItems}>
-            <View style={styles.columnIcons}>
-              <MaterialCommunityIcons name='plus' size={25} color={"#635BFF"}/>
-            </View>
-            <Text style={styles.subTitle}>Top Up</Text>
-          </View>
+        <TouchableOpacity onPress={() => setShowBottomSheet(true)}>
+              <View style={styles.columnItems}>
+                <View style={styles.columnIcons}>
+                  <MaterialCommunityIcons name='plus' size={25} color={"#635BFF"} />
+                </View>
+                <Text style={styles.subTitle}>Top Up</Text>
+              </View>
+            </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.push('/Transfer')}>
           <View style={styles.columnItems}>
@@ -58,24 +119,26 @@ const index = () => {
             <Text style={styles.subTitle}>Request</Text>
           </View>
 
+          <TouchableOpacity onPress={() => router.push('/MoreScreen')}>
           <View style={styles.columnItems}>
             <View style={styles.columnIcons}>
               <Feather name='more-horizontal' size={25} color={"#635BFF"}/>
             </View>
             <Text style={styles.subTitle}>More</Text>
           </View>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
 
      <ScrollView showsVerticalScrollIndicator={false}>
-     <Pressable onPress={() => alert('Referral Is Pressed')}>
+     <Pressable onPress={() => router.push('/Splash')}>
      <View style={styles.notificationCard}>
         <View style={styles.columnInvite}>
           <Image source={require('../../assets/images/Invitation.png')} style={styles.invite}/>
           <View>
             <Text style={styles.text1}>Referral</Text>
             <Text style={styles.text2}>Invite your friends to join on</Text>
-            <Text style={styles.text}>Jigipay and get ₦15.00</Text>
+            <Text style={styles.text}>Jigipay and get ₦15,000.00</Text>
           </View>
         </View>
         <MaterialIcons name='keyboard-arrow-right' size={30} />
@@ -88,18 +151,21 @@ const index = () => {
       </View>
 
      <View style={styles.AllItems}>
-     <View style={styles.rowTransaction}>
-        <View style={styles.Transaction}>
-          <Image source={require('../../assets/images/user1.png')} style={styles.user} />
-          <View>
-            <Text style={styles.columnDateText1}>James Gloom Berb</Text>
-            <Text style={styles.columnDateText2}>Received • Jul 10</Text>
+    <Pressable onPress={() => router.push('/TransactionDetails')}>
+    <View style={styles.rowTransaction}>
+          <View style={styles.Transaction}>
+            <Image source={require('../../assets/images/user1.png')} style={styles.user} />
+            <View>
+              <Text style={styles.columnDateText1}>James Gloom Berb</Text>
+              <Text style={styles.columnDateText2}>Received • Jul 10</Text>
+            </View>
           </View>
+          <Text style={styles.amountText}>₦123.00</Text>
         </View>
-        <Text style={styles.amountText}>₦123.00</Text>
-      </View>
+    </Pressable>
 
-      <View style={styles.rowTransaction}>
+     <Pressable  onPress={() => router.push('/TransactionDetails')}>
+     <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user2.png')} style={styles.user} />
           <View>
@@ -109,7 +175,9 @@ const index = () => {
         </View>
         <Text style={styles.amountText2}>₦123.00</Text>
       </View>
+     </Pressable>
 
+      <Pressable onPress={() => router.push('/TransactionDetails')}>
       <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user3.png')} style={styles.user} />
@@ -120,7 +188,9 @@ const index = () => {
         </View>
         <Text style={styles.amountText}>₦123.00</Text>
       </View>
+      </Pressable>
 
+      <Pressable onPress={() => router.push('/TransactionDetails')}>
       <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user4.png')} style={styles.user} />
@@ -131,8 +201,10 @@ const index = () => {
         </View>
         <Text style={styles.amountText2}>₦123.00</Text>
       </View>
+      </Pressable>
 
-      <View style={styles.rowTransaction}>
+     <Pressable onPress={() => router.push('/TransactionDetails')}>
+     <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user1.png')} style={styles.user} />
           <View>
@@ -142,8 +214,10 @@ const index = () => {
         </View>
         <Text style={styles.amountText2}>₦123.00</Text>
       </View>
+     </Pressable>
 
-      <View style={styles.rowTransaction}>
+     <Pressable onPress={() => router.push('/TransactionDetails')}>
+     <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user2.png')} style={styles.user} />
           <View>
@@ -153,7 +227,9 @@ const index = () => {
         </View>
         <Text style={styles.amountText}>₦123.00</Text>
       </View>
+     </Pressable>
 
+      <Pressable onPress={() => router.push('/TransactionDetails')}>
       <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user2.png')} style={styles.user} />
@@ -164,8 +240,10 @@ const index = () => {
         </View>
         <Text style={styles.amountText}>₦123.00</Text>
       </View>
+      </Pressable>
 
-      <View style={styles.rowTransaction}>
+     <Pressable onPress={() => router.push('/TransactionDetails')}>
+     <View style={styles.rowTransaction}>
         <View style={styles.Transaction}>
           <Image source={require('../../assets/images/user4.png')} style={styles.user} />
           <View>
@@ -175,14 +253,38 @@ const index = () => {
         </View>
         <Text style={styles.amountText2}>₦123.00</Text>
       </View>
+      </Pressable>
+
      </View>
-     
      </ScrollView>
-    </SafeAreaView>
+
+     {showBottomSheet && (
+          <BottomSheet
+            ref={bottomSheetRef}
+            index={1}
+            snapPoints={snapPoints}
+            onClose={() => setShowBottomSheet(false)}
+            enablePanDownToClose
+          >
+            <View style={styles.bottomSheetHeader}>
+              <Text style={styles.bottomSheetTitle}>Select a Bank</Text>
+            </View>
+            <View style={styles.bankItem}>
+              <FontAwesome style={{marginRight: 10}} name='bank' size={24} color={'#635BFf'} />
+              <Text style={styles.bankName}>Bank Transfer </Text>
+            </View>
+
+            <View style={styles.bankItem}>
+              <MaterialIcons style={{marginRight: 10}} name='numbers' size={24} color={'#635BFf'} />
+              <Text style={styles.bankName}>USSD </Text>
+            </View>
+          </BottomSheet>
+        )}
+    </GestureHandlerRootView>
   )
 }
 
-export default index
+export default Index
 
 const styles = StyleSheet.create({
   container: {
@@ -248,13 +350,13 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontWeight: "700",
-    fontFamily: 'Roboto',
+    fontFamily: 'Bold',
+    marginBottom: -5
   },
   date: {
     color: "#555",
     fontSize: 12,
-    fontWeight: "500"
+    fontFamily: 'Medium'
   },
   balance: {
     fontSize: 14,
@@ -275,7 +377,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 32,
-    fontWeight: "900",
+    fontWeight: "700"
   },
   rowItems2: {
     flexDirection: "row",
@@ -294,9 +396,9 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     alignSelf: "center",
-    fontWeight: "500",
     color: "#444",
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Medium'
   },
   invite: {
     width: 60,
@@ -310,16 +412,17 @@ const styles = StyleSheet.create({
   text1: {
     color: "#635BFF",
     fontSize: 16,
-    fontWeight: "700"
+    fontFamily: 'Semibold'
   },
   text2: {
     color: "#635BFF",
-    fontWeight: "500",
     fontSize: 12,
+    fontFamily: 'Medium'
+
   },
   text: {
     color: "#666",
-    fontWeight: "500",
+    fontFamily: 'Medium',
     fontSize: 12,
   },
   Transaction:{
@@ -341,7 +444,8 @@ const styles = StyleSheet.create({
     padding: 14,
     width: "92%",
     alignSelf: "center",
-    borderRadius: 15
+    borderRadius: 15,
+    paddingHorizontal: 25
   },
   user:{
     backgroundColor: "#fff",
@@ -354,25 +458,49 @@ const styles = StyleSheet.create({
   },
   columnDateText1:{
     fontSize: 14,
-    fontWeight: "900",
-    color: "#333"
+    color: "#333",
+    fontFamily: 'Semibold'
   },
   columnDateText2:{
     fontSize: 12,
     color: "#666",
-    fontWeight: "400"
+    fontFamily: 'Medium'
   },
   amountText:{
-    fontWeight: "900",
     fontSize: 14,
-    color: "#13C782"
+    color: "#13C782",
+    fontFamily: 'Bold'
   },
   amountText2:{
-    fontWeight: "900",
+    fontFamily: 'Bold',
     fontSize: 14,
     color: "#F60909"
   },
   AllItems:{
     marginBottom: 100
+  },
+  bottomSheetHeader: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  bottomSheetTitle: {
+    fontSize: 18,
+    fontFamily: 'Semibold',
+  },
+  bankItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+  },
+  bankLogo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,    
+    borderRadius: 100
+  },
+  bankName: {
+    fontSize: 15,
+    fontFamily: "Medium"
   },
 })

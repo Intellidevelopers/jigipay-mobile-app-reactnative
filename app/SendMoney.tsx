@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const SendMoney = () => {
   const navigation = useNavigation();
+  const [amountFocused, setAmountFocused] = useState(false);
+  const [notesFocused, setNotesFocused] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -23,8 +25,21 @@ const SendMoney = () => {
         </View>
       </View>
 
-      <TextInput placeholder="Amount" style={styles.input} keyboardType="numeric" />
-      <TextInput placeholder="Notes *optional" style={styles.notesInput} multiline numberOfLines={4} />
+      <TextInput
+        placeholder="Amount"
+        style={[styles.input, amountFocused && styles.inputFocused]}
+        keyboardType="numeric"
+        onFocus={() => setAmountFocused(true)}
+        onBlur={() => setAmountFocused(false)}
+      />
+      <TextInput
+        placeholder="Notes *optional"
+        style={[styles.notesInput, notesFocused && styles.inputFocused]}
+        multiline
+        numberOfLines={4}
+        onFocus={() => setNotesFocused(true)}
+        onBlur={() => setNotesFocused(false)}
+      />
 
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Proceed</Text>
@@ -57,7 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#F4FAFC',
     borderRadius: 10,
     marginVertical: 20,
   },
@@ -69,14 +84,15 @@ const styles = StyleSheet.create({
   },
   beneficiaryName: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   beneficiaryDetails: {
     color: '#666',
+    fontWeight: "500"
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: '#EEE',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 15,
@@ -84,7 +100,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   notesInput: {
-    borderColor: '#ccc',
+    borderColor: '#EEE',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 15,
@@ -93,12 +109,15 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     textAlignVertical: 'top',
   },
+  inputFocused: {
+    borderColor: '#635BFF',
+  },
   button: {
-    backgroundColor: '#0057FF',
-    paddingVertical: 15,
+    backgroundColor: '#635BFF',
+    paddingVertical: 16,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: '0%',
+    marginTop: '80%',
   },
   buttonText: {
     color: '#fff',
