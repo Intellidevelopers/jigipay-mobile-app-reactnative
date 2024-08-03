@@ -25,13 +25,18 @@ const fetchFonts = () => {
   });
 };
 
-const Transfer = () => {
-  const [selectedBank, setSelectedBank] = useState<{ name: string; logo: any } | null>(null);
+type Bank = {
+  name: string;
+  logo: any;
+};
+
+const Transfer: React.FC = () => {
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
   const [saveBeneficiary, setSaveBeneficiary] = useState(false);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const banks = [
+  const banks: Bank[] = [
     { name: 'Access Bank', logo: require('../assets/banks/access.png') },
     { name: 'Alat VFD', logo: require('../assets/banks/alat.png') },
     { name: 'Citibank', logo: require('../assets/banks/citi.png') },
@@ -54,10 +59,9 @@ const Transfer = () => {
     { name: 'vby FD', logo: require('../assets/banks/vbyfd.png') },
     { name: 'Wema Bank', logo: require('../assets/banks/wema.png') },
     { name: 'Zenith Bank', logo: require('../assets/banks/zenith.png') },
-    // Add more banks as needed
   ];
 
-  const handleBankSelect = (bank: { name: string; logo: any }) => {
+  const handleBankSelect = (bank: Bank) => {
     setSelectedBank(bank);
     bottomSheetRef.current?.close();
     setShowBottomSheet(false);
@@ -74,7 +78,7 @@ const Transfer = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.push('./(tabs)')}>
-            <Ionicons name='arrow-back' size={30} />
+            <Ionicons name="arrow-back" size={30} />
           </TouchableOpacity>
           <Text style={styles.headerText}>Bank Transfer</Text>
         </View>
@@ -83,7 +87,7 @@ const Transfer = () => {
           <View style={styles.beneficiary}>
             <View style={styles.rowItems}>
               <View style={styles.iconContainer}>
-                <Ionicons name='person-circle' size={50} color='#635BFF'/>
+                <Ionicons name="person-circle" size={50} color="#635BFF" />
               </View>
               <View>
                 <Text style={styles.headText}>Beneficiaries</Text>
@@ -98,13 +102,13 @@ const Transfer = () => {
         <View style={styles.dropdownContainer}>
           <TouchableOpacity style={styles.dropdownHeader} onPress={() => setShowBottomSheet(true)}>
             <Text style={styles.dropdownHeaderText}>{selectedBank ? selectedBank.name : 'Select Bank'}</Text>
-            <MaterialIcons name='keyboard-arrow-down' size={24} color='#555' />
+            <MaterialIcons name="keyboard-arrow-down" size={24} color="#555" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.passwordContainer}>
           <TextInput
-            keyboardType='phone-pad'
+            keyboardType="phone-pad"
             placeholder="Account Number"
             style={styles.phoneInput}
           />
@@ -117,7 +121,7 @@ const Transfer = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => {router.push('/PasscodeScreen')}}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/PasscodeScreen')}>
           <Text style={styles.buttonText}>Proceed</Text>
         </TouchableOpacity>
 
@@ -127,7 +131,7 @@ const Transfer = () => {
             snapPoints={snapPoints}
             enablePanDownToClose
             onClose={() => setShowBottomSheet(false)}
-            backgroundStyle={styles.bottomSheetBackground} // Apply the background color
+            backgroundStyle={styles.bottomSheetBackground}
           >
             <BottomSheetFlatList
               data={banks}
@@ -145,7 +149,7 @@ const Transfer = () => {
       </View>
     </GestureHandlerRootView>
   );
-}
+};
 
 export default Transfer;
 
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
@@ -161,11 +165,11 @@ const styles = StyleSheet.create({
     marginTop: 50,
     alignSelf: "flex-start",
     gap: 80,
-    marginLeft: 15
+    marginLeft: 15,
   },
   headerText: {
     fontSize: 18,
-    fontFamily: "Semibold"
+    fontFamily: "Semibold",
   },
   rowItems: {
     flexDirection: 'row',
@@ -179,7 +183,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     alignItems: 'center',
     width: '90%',
-    backgroundColor: "#f7f7f7"
+    backgroundColor: "#f7f7f7",
   },
   iconContainer: {
     backgroundColor: '#ddd',
@@ -190,12 +194,12 @@ const styles = StyleSheet.create({
   headText: {
     fontSize: 16,
     fontFamily: 'Semibold',
-    color: "#333"
+    color: "#333",
   },
   subText: {
     color: '#333',
     fontFamily: 'Medium',
-    fontSize: 12
+    fontSize: 12,
   },
   divider: {
     marginTop: 40,
@@ -229,18 +233,18 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
-    marginBottom: 10
+    marginBottom: 10,
   },
   bankLogo: {
     width: 30,
     height: 30,
     marginRight: 10,
-    borderRadius: 100
+    borderRadius: 100,
   },
   bankName: {
     fontSize: 16,
     color: '#333',
-    fontFamily: 'Medium'
+    fontFamily: 'Medium',
   },
   passwordContainer: {
     borderWidth: 1,
@@ -253,20 +257,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     backgroundColor: "#fff",
-    padding: 10
+    padding: 10,
   },
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 40,
     width: '90%',
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   switchLabel: {
     fontSize: 15,
     marginRight: 10,
     color: "#444",
-    fontFamily: "Medium"
+    fontFamily: "Medium",
   },
   switch: {
     width: 50,
@@ -295,17 +299,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#635BFF",
     padding: 15,
     width: '90%',
-    marginTop: 200,
+    marginTop: 150,
     alignItems: "center",
-    borderRadius: 7
+    borderRadius: 7,
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
-    fontFamily: "Medium"
+    fontFamily: "Medium",
   },
   bottomSheetBackground: {
-    backgroundColor: '#f8f8f8' // Change this to your desired color
+    backgroundColor: '#f8f8f8', // Change this to your desired color
   },
   flatListContentContainer: {
     paddingBottom: 20,

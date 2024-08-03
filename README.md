@@ -1,4 +1,10 @@
-# Welcome to your Expo app 👋
+# Welcome to your World Class Microfinance app 👋
+# Developed by: 
+- *Author*  Adeagbo Josiah
+- *Published Date* (03/08/2024)
+- *Whatsapp* +234 808 711 2167  - (https://wa.me/2348087112167)
+
+*Do not delete these files*
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 

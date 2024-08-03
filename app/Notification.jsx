@@ -20,18 +20,7 @@ const fetchFonts = () => {
   });
 };
 
-type NotificationItem = {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  date?: string;
-  type?: string;
-  action?: string;
-  image: any;
-};
-
-const notifications: NotificationItem[] = [
+const notifications = [
   {
     id: '1',
     title: 'Shopping budget has exceeded...',
@@ -99,17 +88,17 @@ const notifications: NotificationItem[] = [
 ];
 
 const Notification = () => {
-  const renderItem = ({ item }: { item: NotificationItem }) => (
+  const renderItem = ({ item }) => (
     <View style={styles.notificationItem}>
       <Image source={item.image} style={styles.notificationImage} />
       <View style={styles.notificationTextContainer}>
-       <View>
-       <Text style={styles.notificationTitle}>{item.title}</Text>
-       <Text style={styles.notificationDescription}>{item.description}</Text>
-       </View>
+        <View>
+          <Text style={styles.notificationTitle}>{item.title}</Text>
+          <Text style={styles.notificationDescription}>{item.description}</Text>
+        </View>
         <View style={styles.notificationDateTime}>
-        <Text style={styles.notificationTime}>{item.time}</Text>
-        <Text style={styles.notificationDate}>{item.date}</Text>
+          <Text style={styles.notificationTime}>{item.time}</Text>
+          <Text style={styles.notificationDate}>{item.date}</Text>
         </View>
       </View>
     </View>
@@ -117,16 +106,16 @@ const Notification = () => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.dateText}>Today</Text>
-        <View style={styles.notificationItems}>
-            <Image source={require('../assets/notification/1.png')} style={styles.notificationImage} />
-            <View style={styles.notificationTextContainers}>
-                <Text style={styles.notificationTitle}>Cashback 50% </Text>
-                <Text style={styles.notificationDescription}>Get 50% cashback for pizza</Text>
-                <Text style={styles.notificationAction}>Claim it now</Text>
-            </View>
+      <Text style={styles.dateText}>Today</Text>
+      <View style={styles.notificationItems}>
+        <Image source={require('../assets/notification/1.png')} style={styles.notificationImage} />
+        <View style={styles.notificationTextContainers}>
+          <Text style={styles.notificationTitle}>Cashback 50% </Text>
+          <Text style={styles.notificationDescription}>Get 50% cashback for pizza</Text>
+          <Text style={styles.notificationAction}>Claim it now</Text>
         </View>
-        <Text style={styles.dateText}>Yesterday</Text>
+      </View>
+      <Text style={styles.dateText}>Yesterday</Text>
 
       <FlatList
         data={notifications}
@@ -178,54 +167,50 @@ const styles = StyleSheet.create({
   notificationTitle: {
     fontSize: 14,
     fontFamily: 'Semibold',
-    width: '100%'
+    width: '100%',
   },
   notificationDescription: {
     fontSize: 12,
     color: '#666',
     fontFamily: 'Regular',
-
   },
   notificationTime: {
     fontSize: 12,
     color: '#777',
-    fontFamily: "Medium"
-
+    fontFamily: 'Medium',
   },
   notificationDate: {
     fontSize: 12,
     color: '#666',
-    fontFamily: "Medium"
+    fontFamily: 'Medium',
   },
   notificationAction: {
     fontSize: 14,
     color: '#635BFF',
     marginTop: 5,
-    fontFamily: 'Semibold'
+    fontFamily: 'Semibold',
   },
-  cashbackIcon:{
-  width: 50,
-  height: 50
+  cashbackIcon: {
+    width: 50,
+    height: 50,
   },
-  dateText:{
+  dateText: {
     marginBottom: 10,
     fontSize: 15,
-    fontFamily: "Medium",
-    color: "#555",
-    marginTop: -20
-
+    fontFamily: 'Medium',
+    color: '#555',
+    marginTop: -20,
   },
-  notificationItems:{
+  notificationItems: {
     flexDirection: 'row',
     padding: 15,
     backgroundColor: '#E3F2FD',
     borderRadius: 10,
     marginBottom: 20,
     alignItems: 'center',
-
   },
-  notificationDateTime:{
-    flexDirection: "row",
-    gap: 15
-  }
+  notificationDateTime: {
+    flexDirection: 'row',
+    gap: 15,
+  },
 });

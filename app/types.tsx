@@ -1,8 +1,16 @@
-// types.ts
-export interface Slide {
-    key: string;
-    title: string;
-    description: string;
-    image: any; // You can use a more specific type if you know the type of your images
-  }
-  
+
+// Define the type for your stack's parameter list
+export type RootStackParamList = {
+  explore: undefined;
+  TransactionDetails: { transaction: Transaction };
+};
+
+// Define the type for a transaction
+export type Transaction = {
+  id: string;
+  name: string;
+  date: string;
+  amount: string;
+  status: string;
+  image: any; // Replace 'any' with the appropriate type if known, e.g., ImageSourcePropType
+};

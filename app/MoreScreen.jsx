@@ -53,7 +53,7 @@ const MoreScreen = () => {
       <View style={styles.featuresContainer}>
         <TouchableOpacity style={styles.featureItem1}>
           <View style={[styles.featureIcon, { backgroundColor: '#EFEFFF' }]}>
-            <MaterialCommunityIcons name='cellphone-wireless' size={20} color='#6366F1' />
+            <MaterialCommunityIcons name='cellphone-wireless' size={20} color='#4945FF' />
           </View>
           <View style={styles.rowFeatures}>
             <Text style={styles.featureText}>Deposit money to bank</Text>
@@ -71,7 +71,7 @@ const MoreScreen = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.featureItem3}>
+        <TouchableOpacity style={styles.featureItem3} onPress={() => router.push('/BillPayment')}>
           <View style={[styles.featureIcon, { backgroundColor: '#FFEDD5' }]}>
             <MaterialIcons name='electric-bolt' size={20} color='#FBBF24' />
           </View>
@@ -96,7 +96,7 @@ const MoreScreen = () => {
 
       <View style={styles.upgradeContainer}>
         <View style={styles.upgradeContent}>
-          <Ionicons name='card' size={35} color='#6366F1' />
+          <Ionicons name='card' size={35} color='#4945FF' />
           <View style={styles.upgradeTextContainer}>
             <Text style={styles.upgradeTextTitle}>Upgrade KYC Level to deposit and perform higher transactions</Text>
             <TouchableOpacity>
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     width: '55%'
   },
   upgradeButtonText: {
-    color: '#6366F1',
+    color: '#4945FF',
     fontFamily: 'Semibold',
     fontSize: 16
   },

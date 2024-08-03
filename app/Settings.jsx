@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Switch, Image, SafeAreaView, ScrollView } from 'react-native';
-import { Ionicons, MaterialIcons, Feather, EvilIcons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, Feather, SimpleLineIcons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 const Settings = () => {
@@ -90,6 +90,11 @@ const Settings = () => {
           <TouchableOpacity style={styles.sectionItem}>
             <Ionicons name="help-circle" size={24} color="#666" />
             <Text style={styles.sectionItemText}>Support</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.sectionItem} onPress={() => router.push('/Login')}>
+            <SimpleLineIcons name="logout" size={24} color="red" />
+            <Text style={{color: "red", fontSize: 14, marginLeft: 10, fontWeight: "500"}}>Logout</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   switchActive: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
   },
   switchButton: {
     width: 22,

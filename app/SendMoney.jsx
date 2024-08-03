@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 const SendMoney = () => {
   const navigation = useNavigation();
@@ -41,7 +42,7 @@ const SendMoney = () => {
         onBlur={() => setNotesFocused(false)}
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/Confirmation')}>
         <Text style={styles.buttonText}>Proceed</Text>
       </TouchableOpacity>
     </View>
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
-    fontWeight: '500',
+    fontWeight: '700',
     marginLeft: 20,
   },
   beneficiaryInfo: {
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: '80%',
+    marginTop: '70%',
   },
   buttonText: {
     color: '#fff',

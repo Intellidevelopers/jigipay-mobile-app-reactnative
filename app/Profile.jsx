@@ -2,27 +2,27 @@ import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BottomSheet from '@gorhom/bottom-sheet';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CustomImagePicker from '../components/CustomImagePicker';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 
-const profile: React.FC = () => {
+const Profile = () => {
   const [profile, setProfile] = useState({
     name: 'Adeagbo Josiah Adebayo',
     dateOfBirth: new Date(2024, 7, 23),
     gender: 'Male',
-    picture: null as string | null,
+    picture: null,
   });
 
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [currentSheet, setCurrentSheet] = useState<'name' | 'date' | 'gender' | null>(null);
+  const [currentSheet, setCurrentSheet] = useState(null);
 
-  const nameSheetRef = useRef<BottomSheet>(null);
-  const dateSheetRef = useRef<BottomSheet>(null);
-  const genderSheetRef = useRef<BottomSheet>(null);
+  const nameSheetRef = useRef(null);
+  const dateSheetRef = useRef(null);
+  const genderSheetRef = useRef(null);
 
-  const openSheet = (sheet: 'name' | 'date' | 'gender') => {
+  const openSheet = (sheet) => {
     if (currentSheet !== null) {
       closeSheet(currentSheet);
     }
@@ -36,7 +36,7 @@ const profile: React.FC = () => {
     }
   };
 
-  const closeSheet = (sheet: 'name' | 'date' | 'gender') => {
+  const closeSheet = (sheet) => {
     if (sheet === 'name') {
       nameSheetRef.current?.close();
     } else if (sheet === 'date') {
@@ -47,22 +47,24 @@ const profile: React.FC = () => {
     setCurrentSheet(null);
   };
 
-  const handleNameChange = (newName: string) => {
+  const handleNameChange = (newName) => {
     setProfile({ ...profile, name: newName });
     closeSheet('name');
   };
 
-  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+  const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || profile.dateOfBirth;
     setShowDatePicker(false);
     setProfile({ ...profile, dateOfBirth: currentDate });
     closeSheet('date');
   };
 
-  const handleGenderChange = (newGender: string) => {
+  const handleGenderChange = (newGender) => {
     setProfile({ ...profile, gender: newGender });
     closeSheet('gender');
   };
+
+  const router = useRouter();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -78,18 +80,18 @@ const profile: React.FC = () => {
           <Text style={styles.profileName}>{profile.name}</Text>
         </View>
         <View style={styles.profileContainerItems}>
-        <TouchableOpacity style={styles.item} onPress={() => openSheet('name')}>
-          <Text style={styles.itemText}>Real Name</Text>
-          <Text style={styles.itemValue}>{profile.name}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => openSheet('date')}>
-          <Text style={styles.itemText}>Date of Birth</Text>
-          <Text style={styles.itemValue}>{profile.dateOfBirth.toDateString()}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.item} onPress={() => openSheet('gender')}>
-          <Text style={styles.itemText}>Gender</Text>
-          <Text style={styles.itemValue}>{profile.gender}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.item} onPress={() => openSheet('name')}>
+            <Text style={styles.itemText}>Real Name</Text>
+            <Text style={styles.itemValue}>{profile.name}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.item} onPress={() => openSheet('date')}>
+            <Text style={styles.itemText}>Date of Birth</Text>
+            <Text style={styles.itemValue}>{profile.dateOfBirth.toDateString()}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.item} onPress={() => openSheet('gender')}>
+            <Text style={styles.itemText}>Gender</Text>
+            <Text style={styles.itemValue}>{profile.gender}</Text>
+          </TouchableOpacity>
         </View>
 
         {currentSheet && (
@@ -100,7 +102,6 @@ const profile: React.FC = () => {
           />
         )}
 
-        {/* Bottom Sheets */}
         <BottomSheet ref={nameSheetRef} snapPoints={['25%', '50%']} index={-1} onClose={() => setCurrentSheet(null)}>
           <View style={styles.bottomSheet}>
             <Text style={styles.sheetTitle}>Enter your name</Text>
@@ -133,7 +134,7 @@ const profile: React.FC = () => {
   );
 };
 
-export default profile;
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     marginTop: 40,
-    gap: 80
+    gap: 80,
   },
   headerTitle: {
     fontSize: 16,
@@ -158,13 +159,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingVertical: 10,
     borderRadius: 15,
-    marginBottom: 30
+    marginBottom: 30,
   },
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
-    color: "#333"
+    color: "#333",
   },
   item: {
     flexDirection: 'row',
@@ -175,11 +176,11 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 14,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   itemValue: {
     fontSize: 14,
-    color: '#635bff',
+    color: '#4945FF',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -204,10 +205,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 10,
   },
-  profileContainerItems:{
+  profileContainerItems: {
     backgroundColor: "#fff",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
 });

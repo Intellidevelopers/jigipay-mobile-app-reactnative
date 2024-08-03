@@ -3,11 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { useRouter } from 'expo-router';
 
-const AddPersonalInfoScreen: React.FC = () => {
-  const [fullName, setFullName] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
-  const [dateOfBirth, setDateOfBirth] = useState<string>('');
-  const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
+const AddPersonalInfoScreen = () => {
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const router = useRouter();
 
   const showDatePicker = () => {
@@ -18,7 +18,7 @@ const AddPersonalInfoScreen: React.FC = () => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date: Date) => {
+  const handleConfirm = (date) => {
     setDateOfBirth(date.toLocaleDateString());
     hideDatePicker();
   };
@@ -30,11 +30,10 @@ const AddPersonalInfoScreen: React.FC = () => {
       <Text style={styles.title}>Add your personal info</Text>
       <Text style={styles.subtitle}>This info needs to be accurate with your ID document.</Text>
 
-
       <Text style={styles.label}>Full Name</Text>
       <TextInput
         style={styles.input}
-        placeholder="Mr. Jhon Doe"
+        placeholder="Mr. John Doe"
         value={fullName}
         onChangeText={setFullName}
       />
@@ -119,7 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16
   },
-  label:{
+  label: {
     fontSize: 16,
     fontWeight: "500",
     color: "#555"

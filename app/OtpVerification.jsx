@@ -1,32 +1,30 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 
-const OTPVerification = ({ phoneNumber }: { phoneNumber: string }) => {
+const OTPVerification = ({ phoneNumber }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isValid, setIsValid] = useState(true);
+  const inputs = useRef([]);
 
-  const inputs = useRef<TextInput[]>([]);
-
-  const handleChange = (text: string, index: number) => {
+  const handleChange = (text, index) => {
     const newOtp = [...otp];
     newOtp[index] = text;
     setOtp(newOtp);
     validateOtp(newOtp);
 
-    // Move to the next input if a digit is entered
     if (text && index < otp.length - 1) {
       inputs.current[index + 1].focus();
     }
   };
 
-  const handleKeyPress = (e: any, index: number) => {
+  const handleKeyPress = (e, index) => {
     if (e.nativeEvent.key === 'Backspace' && index > 0 && otp[index] === '') {
       inputs.current[index - 1].focus();
     }
   };
 
-  const validateOtp = (otpArray: string[]) => {
+  const validateOtp = (otpArray) => {
     const otpString = otpArray.join('');
     setIsValid(otpString.length === 6);
   };
@@ -34,7 +32,6 @@ const OTPVerification = ({ phoneNumber }: { phoneNumber: string }) => {
   const handleVerify = () => {
     const otpString = otp.join('');
     if (isValid && otpString.length === 6) {
-      // Add your OTP verification logic here
       console.log('OTP is valid:', otpString);
     } else {
       console.log('OTP is invalid');
@@ -42,7 +39,6 @@ const OTPVerification = ({ phoneNumber }: { phoneNumber: string }) => {
   };
 
   const handleResend = () => {
-    // Add your resend OTP logic here
     console.log('Resend OTP');
   };
 
@@ -54,7 +50,7 @@ const OTPVerification = ({ phoneNumber }: { phoneNumber: string }) => {
         {otp.map((digit, index) => (
           <TextInput
             key={index}
-            ref={(ref) => (inputs.current[index] = ref!)}
+            ref={(ref) => (inputs.current[index] = ref)}
             style={styles.otpInput}
             value={digit}
             onChangeText={(text) => handleChange(text, index)}
@@ -72,7 +68,7 @@ const OTPVerification = ({ phoneNumber }: { phoneNumber: string }) => {
       </Text>
       <TouchableOpacity
         style={[styles.verifyButton, isValid ? styles.verifyButtonActive : styles.verifyButtonDisabled]}
-        onPress={() => router.push('/AddEmail')}
+        onPress={() => useRouter().push('/AddEmail')}
         disabled={!isValid}
       >
         <Text style={styles.verifyButtonText}>Verify Your Number</Text>

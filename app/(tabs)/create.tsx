@@ -3,67 +3,25 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Dimensions
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5, Fontisto, Feather } from '@expo/vector-icons';
 
-const { width } = Dimensions.get('window');
 
-const cardData = [
-  { id: 1, image: require('../../assets/images/debit-card.png'), type: 'Debit Card' },
-  { id: 2, image: require('../../assets/images/credit-card.png'), type: 'Credit Card' },
-];
-
-const CustomCarousel = ({ data }: { data: any[] }) => {
-  return (
-    <ScrollView
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.carouselContainer}
-    >
-      {data.map(item => (
-        <View key={item.id} style={styles.card}>
-          <Image source={item.image} style={styles.cardImage} />
-          <Text style={styles.cardType}>{item.type}</Text>
-        </View>
-      ))}
-    </ScrollView>
-  );
-};
 
 const create = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Cards</Text>
-
-      <CustomCarousel data={cardData} />
-
-      <ScrollView style={styles.manageCardSection}>
-        <Text style={styles.manageCardHeader}>Manage Card</Text>
-        <View style={styles.optionList}>
-          <OptionItem icon="wallet" iconLibrary={FontAwesome5} text="Manage Payment Method" />
-          <OptionItem icon="locked" iconLibrary={Fontisto} text="Show PIN" />
-          <OptionItem icon="unlock" iconLibrary={Feather} text="Unblock PIN" />
-          <OptionItem icon="credit-card" iconLibrary={FontAwesome5} text="Replace Card" />
-          <OptionItem icon="tachometer-alt" iconLibrary={FontAwesome5} text="Card Limit" />
-        </View>
-      </ScrollView>
+      <Image source={require('../../assets/images/debit-card.png')} style={styles.Image} />
+      <Text style={styles.header}>Coming soon...</Text>
     </View>
   );
 };
 
-const OptionItem = ({ icon, iconLibrary: IconLibrary, text }: { icon: string, iconLibrary: any, text: string }) => {
-  return (
-    <TouchableOpacity style={styles.optionItem}>
-      <IconLibrary name={icon} size={20} color="#635BFF" />
-      <Text style={styles.optionText}>{text}</Text>
-      <Ionicons name="chevron-forward" size={20} color="#000" />
-    </TouchableOpacity>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
     padding: 20,
+    alignItems: "center",
+    justifyContent: "center"
   },
   header: {
     fontSize: 24,
@@ -80,9 +38,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     marginHorizontal: 40,
-    width: width * 0.5,
   },
-  cardImage: {
+  Image: {
     width: '180%',
     height: 120,
     resizeMode: 'contain',

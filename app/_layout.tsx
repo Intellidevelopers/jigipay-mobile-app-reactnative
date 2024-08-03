@@ -8,10 +8,21 @@ import 'react-native-reanimated';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+
+
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [fontsLoaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+    'Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+    'Regular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'Extrabold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Black': require('../assets/fonts/Poppins-Black.ttf'),
+    'ExtraLight': require('../assets/fonts/Poppins-ExtraLight.ttf'),
+    'Medium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Semibold': require('../assets/fonts/Poppins-SemiBold.ttf'),
+    'Thin': require('../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../assets/fonts/Poppins-Light.ttf'),
     // Add other fonts as needed
   });
 
@@ -67,10 +78,15 @@ export default function RootLayout() {
         <Stack.Screen name="Profile" options={{ headerShown: false }} />
         <Stack.Screen name="MoreScreen" options={{ headerShown: false }} />
         <Stack.Screen name="Login" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="TwoStepVerificationScreen" options={{ headerShown: false }} />
         <Stack.Screen name="EnterCodeScreen" options={{ headerShown: false }} />
         <Stack.Screen name="BudgetDetails" options={{ headerShown: false }} />
+        <Stack.Screen name="BankTransfer" options={{ headerShown: false }} />
+        <Stack.Screen name="USSD" options={{ headerShown: false }} />
+        <Stack.Screen name="ForgotPassword" options={{ headerShown: false }} />
+        <Stack.Screen name="ResetPassword" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
         <Stack.Screen 
           name="Notification" 
           options={{ 
@@ -79,6 +95,102 @@ export default function RootLayout() {
             headerTitleStyle: {
               fontFamily: 'Semibold',
               fontSize: 17  // Customize the header title style as needed
+            },
+          }} 
+        />  
+
+        <Stack.Screen 
+          name="Airtime" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16  // Customize the header title style as needed
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="RegularData" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="BillPayment" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="CheapData" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="Electricity" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="Cable" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="Withdraw" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'left',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
+            },
+          }} 
+        />
+
+        <Stack.Screen 
+          name="Confirmation" 
+          options={{ 
+            headerShown: true, 
+            headerTitleAlign: 'left',
+            headerTitleStyle: {
+              fontFamily: 'Semibold',
+              fontSize: 16,
             },
           }} 
         />

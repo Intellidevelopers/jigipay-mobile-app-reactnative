@@ -27,13 +27,12 @@ const Signup = () => {
       <Image source={require('../assets/images/business.png')} style={styles.mockup} />
       <Text style={styles.headerText}>Create your Jigipay account today!</Text>
       <Text style={styles.subText}>Jigipay is a powerful tool that allows you to easily send, receive, and track all your transactions.</Text>
-      <StatusBar backgroundColor={'black'} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.signupBtn} onPress={() => router.push('/Signup')}>
           <Text style={styles.signupText}> Sign up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginBtn} onPress={() => router.push('/(tabs)')}>
+        <TouchableOpacity style={styles.loginBtn} onPress={() => router.push('/Login')}>
           <Text style={styles.loginText}> Log in</Text>
         </TouchableOpacity>
       </View>
@@ -61,7 +60,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 10,
-    marginTop: 30
+    marginTop: 60
   },
   headerText:{
     fontSize: 26,
@@ -75,15 +74,15 @@ const styles = StyleSheet.create({
     width: '90%',
     fontFamily: "Regular",
     color: "#666",
-    marginBottom: 30,
+    marginBottom: 10,
   },
   buttonContainer:{
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 60
+    marginBottom: 40
   },
   signupBtn:{
-    backgroundColor: "#635BFF",
+    backgroundColor: "#4945FF",
     padding: 14,
     width: 330,
     alignItems: "center",
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: "#635BFF"
+    borderColor: "#4945FF"
   },
   signupText:{
     color: "#fff",
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     fontFamily: "Medium"
   },
   loginText:{
-    color: "#635BFF",
+    color: "#4945FF",
     fontSize: 16,
     fontFamily: "Medium"
   },
@@ -119,12 +118,12 @@ const styles = StyleSheet.create({
     gap: 7
   },
   termsText:{
-    color: "#635BFF",
+    color: "#4945FF",
     fontFamily: "Medium",
     textDecorationLine: "underline"
   },
   privacyText:{
-    color: "#635BFF",
+    color: "#4945FF",
     fontFamily: "Medium",
     textDecorationLine: "underline"
 

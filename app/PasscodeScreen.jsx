@@ -1,11 +1,24 @@
 import { Feather } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const PasscodeScreen = () => {
   const [pin, setPin] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
-  const handlePress = (num: string) => {
+  useEffect(() => {
+    if (pin.length === 5) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigation.navigate('TransactionDetails'); // Redirect to the TransactionDetails screen
+      }, 4000); // 4-second timeout
+    }
+  }, [pin]);
+
+  const handlePress = (num) => {
     if (pin.length < 5) {
       setPin(pin + num);
     }
@@ -41,12 +54,16 @@ const PasscodeScreen = () => {
             <Text style={styles.keyText}>0</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.key} onPress={handleDelete}>
-            <Text style={styles.keyText}>
-            <Feather name='delete' size={25}/>
-            </Text>
+            <Feather name='delete' size={25} />
           </TouchableOpacity>
         </View>
       </View>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={styles.loadingText}>Processing...</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -64,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 40,
     marginTop: 100,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   pinContainer: {
     flexDirection: 'row',
@@ -83,7 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginTop: 40,
+    marginTop: 90,
   },
   keyRow: {
     flexDirection: 'row',
@@ -95,6 +112,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 10,
   },
   keyText: {
     fontSize: 24,
@@ -102,5 +120,38 @@ const styles = StyleSheet.create({
   },
   emptyKey: {
     width: '30%',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: 200,
+    height: 200,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  successText: {
+    fontSize: 16,
+    fontFamily: 'Medium',
+  },
+  logo:{
+    width: 100,
+    height: 100
+  },
+  loadingContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
   },
 });

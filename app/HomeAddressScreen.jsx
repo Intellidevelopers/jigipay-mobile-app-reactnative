@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Button, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
-const HomeAddressScreen: React.FC = () => {
-  const [addressLine, setAddressLine] = useState<string>('');
-  const [city, setCity] = useState<string>('');
-  const [postcode, setPostcode] = useState<string>('');
-  const [selectedCountry, setSelectedCountry] = useState<string>('US');
-  const [showCountryModal, setShowCountryModal] = useState<boolean>(false);
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [displayDate, setDisplayDate] = useState<string>(new Date().toDateString());
+const HomeAddressScreen = () => {
+  const [addressLine, setAddressLine] = useState('');
+  const [city, setCity] = useState('');
+  const [postcode, setPostcode] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('US');
+  const [showCountryModal, setShowCountryModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [displayDate, setDisplayDate] = useState(new Date().toDateString());
 
   const countries = [
     { code: 'US', name: 'United States' },
@@ -21,13 +20,13 @@ const HomeAddressScreen: React.FC = () => {
     // Add more countries as needed
   ];
 
-  const handleDateChange = (newDate: Date) => {
+  const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
     setDisplayDate(newDate.toDateString());
-    setShowDatePicker(false);
+    setShowCountryModal(false);
   };
 
-  const handleCountrySelect = (countryCode: string) => {
+  const handleCountrySelect = (countryCode) => {
     setSelectedCountry(countryCode);
     setShowCountryModal(false);
   };
@@ -38,8 +37,8 @@ const HomeAddressScreen: React.FC = () => {
         <View style={styles.closeBtnContainer}>
           <Text style={styles.countryModalTitle}>Select Country</Text>
           <TouchableOpacity onPress={() => setShowCountryModal(false)}>
-          <Ionicons name='close' size={24}/>
-        </TouchableOpacity>
+            <Ionicons name="close" size={24} />
+          </TouchableOpacity>
         </View>
         {countries.map((country) => (
           <TouchableOpacity
@@ -50,12 +49,9 @@ const HomeAddressScreen: React.FC = () => {
             <Text style={styles.countryModalText}>{country.name}</Text>
           </TouchableOpacity>
         ))}
-       
       </View>
     </View>
   );
-
-
 
   return (
     <View style={styles.container}>
@@ -96,9 +92,6 @@ const HomeAddressScreen: React.FC = () => {
         onChangeText={setPostcode}
       />
 
-
-     
-
       <Modal
         transparent={true}
         visible={showCountryModal}
@@ -118,7 +111,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff'
   },
   progressBar: {
     height: 4,
@@ -146,7 +139,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontSize: 16,
-    color: "#555"
+    color: '#555'
   },
   button: {
     backgroundColor: '#635BFF',
@@ -158,7 +151,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: "#fff"
+    color: '#fff'
   },
   modalOverlay: {
     flex: 1,
@@ -185,21 +178,15 @@ const styles = StyleSheet.create({
   countryModalText: {
     fontSize: 16,
   },
-  headerText:{
+  headerText: {
     fontSize: 16,
-    fontWeight: "500",
-    color: "#444"
+    fontWeight: '500',
+    color: '#444'
   },
-  closeBtn:{
-    backgroundColor: "#635BFF",
-    padding: 8,
-    borderRadius: 20,
-    alignItems: "center"
-  },
-  closeBtnContainer:{
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between"
+  closeBtnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   }
 });
 

@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "app/ConfirmPhoneScreen.jsx", "app/BudgetDetails.jsx", "app/EnterCodeScreen.jsx", "app/getstarted.jsx", "app/HomeAddressScreen.jsx", "app/Login.jsx", "app/Notification.jsx", "app/Onboarding.jsx", "app/OtpVerification.jsx", "app/PasscodeScreen.jsx", "app/PinSetup.jsx", "app/Profile.jsx", "app/SendMoney.jsx", "app/Settings.jsx", "app/Signup.tsx", "app/Splash.jsx", "app/Transfer.tsx", "app/TransactionDetails.jsx", "app/TwoStepVerificationScreen.tsx", "app/types.tsx", "app/MoreScreen.jsx", "app/Beneficiaries.jsx", "app/AddPersonalInfoScreen.jsx", "app/AddEmail.jsx", "app/Withdraw.jsx" , "app/(tabs)/explore.tsx" ]
 }

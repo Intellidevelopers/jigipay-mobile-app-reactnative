@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Link, router } from 'expo-router';
 import CountryPicker, { CountryCode } from 'react-native-country-picker-modal';
 import * as SplashScreen from 'expo-splash-screen';
@@ -27,14 +27,24 @@ const TwoStepVerificationScreen = () => {
   const [countryCode, setCountryCode] = useState<CountryCode>('NG');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [callingCode, setCallingCode] = useState('234'); // Updated to match Nigeria calling code
-  const [InputFocused, setInputFocused] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
+  const validatePhoneNumber = () => {
+    if (phoneNumber.length < 10) {
+      setErrorMessage('Please enter a valid phone number.');
+      setIsModalVisible(true);
+    } else {
+      router.push('/EnterCodeScreen');
+    }
+  };
 
   return (
     <View style={styles.container}>
-        <View style={styles.pagination}>
+      <View style={styles.pagination}>
         <TouchableOpacity onPress={() => router.back()}>
-        <FontAwesome6 style={{ marginRight: 50, marginLeft: -85 }} name='xmark' size={24} />
+          <FontAwesome6 style={{ marginRight: 50, marginLeft: -85 }} name='xmark' size={24} />
         </TouchableOpacity>
         <View style={[styles.dot, styles.activeDot]} />
         <View style={[styles.dot, styles.activeDot]} />
@@ -46,9 +56,9 @@ const TwoStepVerificationScreen = () => {
         Enter your phone number so we can text you an authentication code.
       </Text>
       <View style={styles.label}>
-            <Text style={styles.labelText}>Country</Text>
-            <Text style={styles.labelText}>Phone</Text>
-        </View>
+        <Text style={styles.labelText}>Country</Text>
+        <Text style={styles.labelText}>Phone</Text>
+      </View>
       <View style={styles.phoneContainer}>
         <View style={styles.flagContainer}>
           <CountryPicker
@@ -63,19 +73,39 @@ const TwoStepVerificationScreen = () => {
           />
         </View>
         <TextInput
-        style={[styles.input, InputFocused && styles.inputFocused]}
+          style={[styles.input, inputFocused && styles.inputFocused]}
           placeholder="Phone"
           keyboardType="phone-pad"
           value={phoneNumber}
           onChangeText={setPhoneNumber}
-        onFocus={() => setInputFocused(true)}
-        onBlur={() => setInputFocused(false)}
-
+          onFocus={() => setInputFocused(true)}
+          onBlur={() => setInputFocused(false)}
         />
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => {router.push('/EnterCodeScreen')}}>
+      <TouchableOpacity style={styles.button} onPress={validatePhoneNumber}>
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
+
+      {/* Error Modal */}
+      <Modal
+        transparent={true}
+        visible={isModalVisible}
+        animationType="slide"
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Error</Text>
+            <Text style={styles.modalMessage}>{errorMessage}</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -123,10 +153,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   inputFocused: {
-    borderColor: '#635BFF',
+    borderColor: '#4945FF',
   },
   button: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -164,7 +194,41 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButton: {
+    backgroundColor: '#4945FF',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    paddingHorizontal: 50
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

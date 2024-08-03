@@ -38,7 +38,7 @@ const TransactionDetails = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/tabs')}>
+        <TouchableOpacity onPress={() => router.push('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Transaction Details</Text>
@@ -53,7 +53,7 @@ const TransactionDetails = () => {
 
       <View style={styles.transactionInfoNote}>
        <Zocial name='buffer' size={15} color={'#666'}/>
-       <Text style={{color: '#635BFF', fontFamily: 'Semibold', fontSize: 12}}>Eating out</Text>
+       <Text style={{color: '#4945FF', fontFamily: 'Semibold', fontSize: 12}}>Eating out</Text>
        <Ionicons name='caret-down' size={15} color={'#666'}/>
       </View>
 
@@ -98,7 +98,7 @@ const TransactionDetails = () => {
         paddingVertical: 20,
         flexDirection: "row",
         justifyContent: "space-between",
-        backgroundColor: "#635BFF",
+        backgroundColor: "#4945FF",
         marginBottom: 20,
         width: '45%',
         alignSelf: "center",
@@ -121,10 +121,10 @@ const TransactionDetails = () => {
         borderRadius: 15,
         gap: 10,
         borderWidth: 1,
-        borderColor: '#635BFF'
+        borderColor: '#4945FF'
       }}>
-        <Text style={{color: '#635BFF', fontWeight: "700"}}>Download</Text>
-        <Ionicons name='cloud-download' size={24} color={'#635BFF'} />
+        <Text style={{color: '#4945FF', fontWeight: "700"}}>Download</Text>
+        <Ionicons name='cloud-download' size={24} color={'#4945FF'} />
       </View>
       </View>
     </View>
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    gap: 40,
+    marginBottom: 5,
+    gap: 50,
     marginTop: 20
   },
   headerText: {
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   profileInitial: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#635BFF',
+    color: '#4945FF',
   },
   transferTo: {
     fontSize: 16,
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     alignSelf: "flex-end",
     marginBottom: 10,
-    color: '#635BFF',
+    color: '#4945FF',
     marginLeft: -15
   },
   transactionValue3: {
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     alignSelf: "flex-end",
     marginBottom: 10,
-    color: '#635BFF',
+    color: '#4945FF',
     
   },
   success:{

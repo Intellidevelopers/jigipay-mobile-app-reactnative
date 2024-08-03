@@ -1,62 +1,88 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, SafeAreaView, TouchableOpacity, Pressable, StatusBar } from 'react-native';
-import { Link } from 'expo-router';
-import { Ionicons, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Pressable,
+  Modal,
+  Animated,
+  Easing,
+  Dimensions,
+} from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  Feather,
+  MaterialIcons,
+  FontAwesome,
+} from '@expo/vector-icons';
 import { router } from 'expo-router';
-import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { ExpoRouter } from 'expo-router/types/expo-router'
 
-SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
-    'Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
-    'Extrabold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
-    'Black': require('../../assets/fonts/Poppins-Black.ttf'),
-    'ExtraLight': require('../../assets/fonts/Poppins-ExtraLight.ttf'),
-    'Medium': require('../../assets/fonts/Poppins-Medium.ttf'),
-    'Semibold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
-    'Thin': require('../../assets/fonts/Poppins-Thin.ttf'),
-    'Light': require('../../assets/fonts/Poppins-Light.ttf'),
-    'Mano': require('../../assets/fonts/SpaceMono-Regular.ttf')
-  });
-};
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+
 
 const Index = () => {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isHidden, setIsHidden] = useState(true);
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
-  const [selectedBank, setSelectedBank] = useState<{ name: string, logo: any } | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showBottomCard, setShowBottomCard] = useState(false);
+  const bottomCardHeight = useRef(new Animated.Value(0)).current;
+  const router = useRouter();
 
-  const banks = [
-    { name: 'Bank Transfer', logo: require('../../assets/images/bank.png') },
-    { name: 'USSD', logo: require('../../assets/images/ussd.jpeg') },
-    // Add more banks as needed
-  ];
 
-  const snapPoints = useMemo(() => ['25%', '40%'], []);
-
-  const handleBankSelect = (bank: { name: string, logo: any }) => {
-    setSelectedBank(bank);
-    bottomSheetRef.current?.close();
-    setShowBottomSheet(false);
-  };
-
-  useEffect(() => {
-    fetchFonts().then(() => {
-      setFontsLoaded(true);
-      SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
-    }).catch((error) => console.warn(error));
-  }, []);
-
-  if (!fontsLoaded) {
-    return null; // Return null until fonts are loaded and splash screen is hidden
+  function setShowBottomSheet(arg0: boolean): void {
+    throw new Error('Function not implemented.');
   }
+
+
+  
+    const banks = [
+      { name: 'Cheap Data', description: 'up to 60% discount', route: '/CheapData' },
+      { name: 'Regular Data', description: '', route: '/RegularData' },
+      // Add more options as needed
+    ];
+  
+    const handleBankSelect = (route: ExpoRouter.Href) => {
+      Animated.timing(bottomCardHeight, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }).start(() => {
+        setShowBottomCard(false);
+        router.push(route); // Navigate to the selected route
+      });
+    };
+  
+    const toggleBottomCard = () => {
+      if (showBottomCard) {
+        Animated.timing(bottomCardHeight, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.linear,
+          useNativeDriver: false,
+        }).start(() => setShowBottomCard(false));
+      } else {
+        setShowBottomCard(true);
+        Animated.timing(bottomCardHeight, {
+          toValue: SCREEN_HEIGHT / 2,
+          duration: 300,
+          easing: Easing.linear,
+          useNativeDriver: false,
+        }).start();
+      }
+    };
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -85,12 +111,11 @@ const Index = () => {
             <Ionicons name={isHidden ? 'eye-off' : 'eye'} size={30} />
           </TouchableOpacity>
         </View>
-        <StatusBar backgroundColor={'black'} />
         <View style={styles.rowItems2}>
-        <TouchableOpacity onPress={() => setShowBottomSheet(true)}>
+        <TouchableOpacity onPress={() => setShowModal(true)}>
               <View style={styles.columnItems}>
                 <View style={styles.columnIcons}>
-                  <MaterialCommunityIcons name='plus' size={25} color={"#635BFF"} />
+                  <MaterialCommunityIcons name='plus' size={25} color={"#4945FF"} />
                 </View>
                 <Text style={styles.subTitle}>Top Up</Text>
               </View>
@@ -99,39 +124,43 @@ const Index = () => {
           <TouchableOpacity onPress={() => router.push('/Transfer')}>
           <View style={styles.columnItems}>
             <View style={styles.columnIcons}>
-              <MaterialCommunityIcons name='bank' size={25} color={"#635BFF"}/>
+              <MaterialCommunityIcons name='bank' size={25} color={"#4945FF"}/>
             </View>
             <Text style={styles.subTitle}>Transfer</Text>
           </View>
           </TouchableOpacity>
-
+          <TouchableOpacity onPress={() => router.push('/Airtime')}>
           <View style={styles.columnItems}>
             <View style={styles.columnIcons}>
-              <Feather name='arrow-up-circle' size={25} color={"#635BFF"}/>
+              <Feather name='phone' size={25} color={"#4945FF"}/>
             </View>
-            <Text style={styles.subTitle}>Pay</Text>
-          </View>
-
-          <View style={styles.columnItems}>
-            <View style={styles.columnIcons}>
-              <Feather name='arrow-down-circle' size={25} color={"#635BFF"}/>
-            </View>
-            <Text style={styles.subTitle}>Request</Text>
-          </View>
-
-          <TouchableOpacity onPress={() => router.push('/MoreScreen')}>
-          <View style={styles.columnItems}>
-            <View style={styles.columnIcons}>
-              <Feather name='more-horizontal' size={25} color={"#635BFF"}/>
-            </View>
-            <Text style={styles.subTitle}>More</Text>
+            <Text style={styles.subTitle}>Airtime</Text>
           </View>
           </TouchableOpacity>
+          <TouchableOpacity  onPress={toggleBottomCard}>
+          <View style={styles.columnItems}>
+            <View style={styles.columnIcons}>
+              <Feather name='wifi' size={25} color={"#4945FF"}/>
+            </View>
+            <Text style={styles.subTitle}>Data</Text>
+          </View>
+          </TouchableOpacity>
+
+         <TouchableOpacity onPress={() => router.push('/Withdraw')}>
+          <View style={styles.columnItems}>
+              <View style={styles.columnIcons}>
+                <Feather name='arrow-down-circle' size={25} color={"#4945FF"}/>
+              </View>
+              <Text style={styles.subTitle}>Withdraw</Text>
+            </View>
+         </TouchableOpacity>
+
+         
         </View>
       </ImageBackground>
 
      <ScrollView showsVerticalScrollIndicator={false}>
-     <Pressable onPress={() => router.push('/Splash')}>
+     <Pressable onPress={() => alert('You pressed referral')}>
      <View style={styles.notificationCard}>
         <View style={styles.columnInvite}>
           <Image source={require('../../assets/images/Invitation.png')} style={styles.invite}/>
@@ -258,32 +287,49 @@ const Index = () => {
      </View>
      </ScrollView>
 
-     {showBottomSheet && (
-          <BottomSheet
-            ref={bottomSheetRef}
-            index={1}
-            snapPoints={snapPoints}
-            onClose={() => setShowBottomSheet(false)}
-            enablePanDownToClose
-          >
-            <View style={styles.bottomSheetHeader}>
-              <Text style={styles.bottomSheetTitle}>Select a Bank</Text>
-            </View>
-            <View style={styles.bankItem}>
-              <FontAwesome style={{marginRight: 10}} name='bank' size={24} color={'#635BFf'} />
-              <Text style={styles.bankName}>Bank Transfer </Text>
-            </View>
+     <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showModal}
+        onRequestClose={() => {
+          setShowModal(!showModal);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>More</Text>
+            <Text style={styles.modalText}>Choose your top-up method:</Text>
+           <TouchableOpacity style={styles.button} onPress={() => {setShowModal(!showModal); router.push('/BankTransfer');}}>
+            <Text style={styles.buttonText}>Top up with bank transfer</Text>
+           </TouchableOpacity>
 
-            <View style={styles.bankItem}>
-              <MaterialIcons style={{marginRight: 10}} name='numbers' size={24} color={'#635BFf'} />
-              <Text style={styles.bankName}>USSD </Text>
-            </View>
-          </BottomSheet>
-        )}
+           <TouchableOpacity style={styles.button} onPress={() => {setShowModal(!showModal); router.push('/USSD');}}>
+            <Text style={styles.buttonText}>USSD</Text>
+           </TouchableOpacity>
+
+           <TouchableOpacity style={styles.button} onPress={() => {setShowModal(!showModal);}}>
+            <Text style={styles.buttonText}>Close</Text>
+           </TouchableOpacity>
+          </View>
+        </View>
+        </Modal>
+
+        {showBottomCard && (
+        <Animated.View style={[styles.bottomCard, { height: bottomCardHeight }]}>
+          <View style={styles.bottomCardHeader}>
+            <Text style={styles.bottomCardTitle}>Data Subscription</Text>
+          </View>
+          {banks.map((bank) => (
+            <TouchableOpacity key={bank.name} style={styles.bankItem} onPress={() => handleBankSelect(bank.route)}>
+              <Text style={styles.bankName}>{bank.name}</Text>
+              {bank.description ? <Text style={styles.bankDescription}>{bank.description}</Text> : null}
+            </TouchableOpacity>
+          ))}
+        </Animated.View>
+      )}
     </GestureHandlerRootView>
   )
 }
-
 export default Index
 
 const styles = StyleSheet.create({
@@ -321,7 +367,7 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   },
   viewMore: {
-    color: "#635BFF",
+    color: "#4945FF",
     fontWeight: "500",
     marginLeft: -5,
   },
@@ -410,12 +456,12 @@ const styles = StyleSheet.create({
     marginLeft: -10
   },
   text1: {
-    color: "#635BFF",
+    color: "#4945FF",
     fontSize: 16,
     fontFamily: 'Semibold'
   },
   text2: {
-    color: "#635BFF",
+    color: "#4945FF",
     fontSize: 12,
     fontFamily: 'Medium'
 
@@ -488,19 +534,114 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Semibold',
   },
-  bankItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-  },
   bankLogo: {
     width: 40,
     height: 40,
     marginRight: 10,    
     borderRadius: 100
   },
-  bankName: {
-    fontSize: 15,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: 'Bold',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    fontFamily: 'Regular',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButton: {
+    borderRadius: 20,
+    elevation: 2,
+    marginTop: 10,
+    width: '100%',
+  },
+  modalButtonClose: {
+    backgroundColor: '#4945FF',
+    width: '100%',
+  },
+  textStyle: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Bold',
+    textAlign: 'center',
+  },
+  button:{
+    backgroundColor: "#4945FF",
+    padding: 10,
+    width: 250,
+    marginBottom: 10,
+    borderRadius: 10,
+    alignItems: "center"
+  },
+  buttonText:{
+    color: "#fff",
     fontFamily: "Medium"
+  },
+  bottomCard: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  bottomCardHeader: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  bottomCardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  bankItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  bankName: {
+    fontSize: 16,
+    fontFamily: "Regular"
+  },
+  bankDescription: {
+    fontSize: 10,
+    color: '#fff',
+    fontFamily: "Regular",
+    backgroundColor: "#635BFF",
+    padding: 4,
+    borderRadius: 15
   },
 })

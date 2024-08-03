@@ -1,8 +1,6 @@
-// app/Onboarding1.tsx
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Animated, Image, NativeScrollEvent, NativeSyntheticEvent, Pressable } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Dimensions, Animated, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Slide } from './types';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -25,7 +23,7 @@ const fetchFonts = () => {
 
 const { width } = Dimensions.get('window');
 
-const slides: Slide[] = [
+const slides = [
   {
     key: '1',
     title: 'Track Your Expenses',
@@ -46,18 +44,26 @@ const slides: Slide[] = [
   },
 ];
 
-const Onboarding: React.FC = () => {
+const Onboarding = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+  useEffect(() => {
+    const loadFonts = async () => {
+      await fetchFonts();
+      SplashScreen.hideAsync();
+    };
+    loadFonts();
+  }, []);
+
+  const handleScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / width);
     setCurrentIndex(index);
   };
 
-  const renderItem = ({ item }: { item: Slide }) => (
+  const renderItem = ({ item }) => (
     <View style={styles.container}>
       <Image source={item.image} style={styles.image} />
       <Text style={styles.title}>{item.title}</Text>
@@ -86,10 +92,11 @@ const Onboarding: React.FC = () => {
         ))}
       </View>
       {currentIndex === 2 && (
-        <Pressable style={styles.button} onPress={() => router.push('/getstarted')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/getstarted')}>
           <Text style={styles.buttonText}>Get Started</Text>
-        </Pressable>
+        </TouchableOpacity>
       )}
+      <StatusBar backgroundColor={'#fff'}/>
     </View>
   );
 };
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 80,
+    marginBottom: 100,
     paddingHorizontal: 20,
     fontFamily: 'Regular'
   },
@@ -138,13 +145,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   activeDot: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
   },
   button: {
     position: 'absolute',
     bottom: 80,
-    backgroundColor: "#635BFF",
-    paddingVertical: 13,
+    backgroundColor: "#4945FF",
+    paddingVertical: 12,
     paddingHorizontal: 110,
     borderRadius: 5,
   },

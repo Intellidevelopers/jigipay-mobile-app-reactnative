@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
   },
   title: {
     fontSize: 24,
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Regular',
   },
   inputFocused: {
-    borderColor: '#635BFF',
+    borderColor: '#4945FF',
   },
   termsContainer: {
     flexDirection: 'row',
@@ -283,8 +283,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#635BFF',
-    borderColor: '#635BFF',
+    backgroundColor: '#4945FF',
+    borderColor: '#4945FF',
   },
   termsText: {
     flex: 1,
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   button: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     marginTop: 65,
   },
   modalButton: {
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
     borderRadius: 4,
     paddingVertical: 10,
     paddingHorizontal: 40,
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   },
   labels:{
     fontFamily: "Regular",
-    color: "#635bff"
+    color: "#4945FF"
   }
 });
 

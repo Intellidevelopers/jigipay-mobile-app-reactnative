@@ -1,63 +1,75 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { Link, router } from 'expo-router';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { router } from 'expo-router';
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons';
 
-const LoginScreen = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
   const [isSelected, setSelection] = useState(false);
+  const [loading, setLoading] = useState(false); // State to manage loading indicator
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // State to manage password visibility
+
+  const correctEmail = 'worldclassmicrofinance@gmail.com';
+  const correctPassword = '1234ABC@#$';
 
   const toggleCheckbox = () => {
     setSelection(!isSelected);
   };
 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const handleLogin = () => {
+    setLoading(true); // Start loading
+    setTimeout(() => {
+      if (email === correctEmail && password === correctPassword) {
+        setLoading(false); // Stop loading
+        router.push('/ResetPassword'); // Navigate to the home page
+      } else {
+        setLoading(false); // Stop loading
+        Alert.alert('Error', 'Invalid email, this email is not registered');
+      } if (email === correctEmail){
+        setLoading(true);
+        Alert.alert('Password reset successfull');
+        router.push('/ResetPassword');
+      }
+    }, 2000); // Simulated delay for login process
+  };
+
   return (
     <View style={styles.container}>
-       <TouchableOpacity onPress={() => router.back()}>
+      <TouchableOpacity onPress={() => router.back()}>
         <FontAwesome6 style={{ marginRight: 50, marginTop: 30 }} name='xmark' size={22} />
-        </TouchableOpacity>
+      </TouchableOpacity>
       <View style={styles.header}>
         <Text style={styles.logo}>Jigipay</Text>
       </View>
-      <Text style={styles.welcomeText}>Welcome back!</Text>
-      <Text style={styles.subtitleText}>Please login to continue</Text>
+      <Text style={styles.welcomeText}>Forgot password?</Text>
+      <Text style={styles.subtitleText}>Please reset your password!</Text>
       <View style={styles.inputContainer}>
-
-      <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Enter your registered email"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
         />
-      <Text style={styles.label}>Password</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-          style={styles.passwordInput}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <MaterialIcons name="visibility-off" size={24} color="gray" style={styles.eyeIcon} />
-        </View>
-        <View style={styles.rememberMeContainer}>
-        <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
-          <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-            {isSelected && <FontAwesome6 name="check" size={16} color="#fff" />}
-          </View>
-        </TouchableOpacity>
-          <Text style={styles.rememberMeText}>Remember me</Text>
-          <TouchableOpacity>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+       
+        
+        <TouchableOpacity style={styles.signupbtn} onPress={() => router.push('/Login')}>
+            <Text style={styles.forgotPasswordText}>Login</Text>
           </TouchableOpacity>
-        </View>
       </View>
-      <TouchableOpacity style={styles.loginButton} onPress={() => {router.push('/(tabs)')}}>
-        <Text style={styles.loginButtonText}>Login</Text>
+     
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.loginButtonText}>Reset Password</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -77,7 +89,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: 24,
-    color: '#635BFF',
+    color: '#4945FF',
     fontFamily: "Semibold"
   },
   welcomeText: {
@@ -93,11 +105,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
-    marginTop: 40
+    marginTop: -10
   },
   input: {
     height: 55,
-    borderColor: '#635BFF',
+    borderColor: '#4945FF',
     borderWidth: 1,
     borderRadius: 7,
     paddingLeft: 10,
@@ -107,7 +119,7 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: '#635BFF',
+    borderColor: '#4945FF',
     borderWidth: 1,
     borderRadius: 7,
     paddingLeft: 10,
@@ -131,27 +143,23 @@ const styles = StyleSheet.create({
     fontFamily: "Semibold"
   },
   forgotPasswordText: {
-    color: '#635BFF',
+    color: '#4945FF',
     fontFamily: "Semibold"
   },
   loginButton: {
     height: 55,
-    backgroundColor: '#635BFF',
+    backgroundColor: '#4945FF',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '60%',
     fontFamily: "Medium"
   },
   loginButtonText: {
     color: '#fff',
     fontSize: 18,
   },
-  label:{
+  label: {
     fontFamily: "Semibold"
-  },
-  inputFocused: {
-    borderColor: '#635BFF',
   },
   checkboxContainer: {
     marginRight: -60,
@@ -166,9 +174,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#635BFF',
-    borderColor: '#635BFF',
+    backgroundColor: '#4945FF',
+    borderColor: '#4945FF',
   },
+  signupbtn:{
+    alignSelf: "center",
+    marginTop: 270
+  }
 });
 
-export default LoginScreen;
+export default ForgotPassword;
